@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="chromeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="35%" stop-color="#E2E8F0" />
+      <stop offset="50%" stop-color="#94A3B8" />
+      <stop offset="70%" stop-color="#CBD5E1" />
+      <stop offset="100%" stop-color="#64748B" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141416" />
+      <stop offset="100%" stop-color="#050507" />
+    </linearGradient>
+  </defs>
+  <!-- Background with subtle border -->
+  <rect width="128" height="128" rx="28" fill="url(#bgGrad)" stroke="#334155" stroke-width="2"/>
+  
+  <!-- Stylized RADNUZ 'R' Emblem -->
+  <path d="M32 30 H68 C84 30 96 40 96 54 C96 66 87 75 75 77 L98 98 H80 L60 78 H48 V98 H32 V30 Z M48 44 V64 H66 C74 64 80 60 80 54 C80 48 74 44 66 44 H48 Z" fill="url(#chromeGrad)"/>
+  <!-- Cyber Cut Accent on the R -->
+  <polygon points="32,30 46,30 32,44" fill="#FFFFFF" opacity="0.6"/>
+  <polygon points="76,78 98,98 87,98 68,80" fill="#94A3B8"/>
+</svg>
