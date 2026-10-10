@@ -79,7 +79,7 @@ export default function CustomizerPage({ setActivePage }) {
     showToast("Generating composite mockup...", "info");
 
     // Generate accurate mockup picture preview
-    let previewUrl = graphicImage || "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000&auto=format&fit=crop";
+    let previewUrl = graphicImage || "https://res.cloudinary.com/dapilmiei/image/upload/v1791632970/aj-back_pblqgr.png";
     try {
       const { dataUrl } = await generateMockupImage({
         apparelType,
