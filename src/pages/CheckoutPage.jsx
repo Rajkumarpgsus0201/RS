@@ -70,9 +70,15 @@ export default function CheckoutPage({ setActivePage, onOpenPolicyModal }) {
     let itemsText = cartItems.map((item, index) => {
       let customDetail = '';
       if (item.isCustom) {
-        customDetail = `       • 1-OF-1 Custom Print\n` +
+        customDetail += `       • 1-OF-1 Custom Print\n` +
           (item.customText ? `       • Custom Text: "${item.customText}"\n` : '') +
-          `       • Placement: ${item.printPlacement?.toUpperCase() || 'FRONT'}\n`;
+          `       • Placement: ${item.printPlacement?.toUpperCase() || 'FRONT'}\n` +
+          `       • 📸 Design Picture: Saved on device & sharing in chat!\n`;
+      }
+      if (item.isUpcoming) {
+        customDetail += `       • ⚡ IN-LOAD PRE-RESERVATION (BATCH 02)\n` +
+          `       • Factory Stage: ${item.loadStatus || 'In Assembly Pipeline'}\n` +
+          `       • Target Arrival: ${item.eta || 'Drop 02'}\n`;
       }
 
       return (
@@ -262,6 +268,44 @@ Please confirm order and send UPI ID / Payment QR to proceed with dispatch.`;
               <span className="text-brand-secondary font-mono text-base">₹{completedOrder.total}</span>
             </div>
           </div>
+
+          {/* Custom Design Mockup Picture Card (if order has custom 1-of-1 items) */}
+          {completedOrder.items.some(i => i.isCustom && i.customPreviewUrl) && (
+            <div className="p-4 rounded-2xl bg-brand-dark/90 border border-brand-primary/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <img
+                  src={completedOrder.items.find(i => i.isCustom && i.customPreviewUrl)?.customPreviewUrl}
+                  alt="Custom Mockup Design"
+                  className="w-14 h-16 object-contain rounded-xl border border-brand-border bg-brand-surface shrink-0"
+                />
+                <div>
+                  <span className="text-xs font-heading font-bold text-brand-light block">
+                    📸 1-OF-1 Custom Design Picture Ready
+                  </span>
+                  <span className="text-[11px] text-brand-muted font-body">
+                    Attach this image in the WhatsApp chat to confirm print alignment!
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const customItem = completedOrder.items.find(i => i.isCustom && i.customPreviewUrl);
+                  if (customItem && customItem.customPreviewUrl) {
+                    const a = document.createElement('a');
+                    a.href = customItem.customPreviewUrl;
+                    a.download = `RADNUZ-Custom-Design-${completedOrder.orderId}.png`;
+                    a.click();
+                    showToast("Custom design picture downloaded!", "success");
+                  }
+                }}
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-brand-elevated hover:bg-brand-border text-brand-secondary border border-brand-border text-xs font-heading font-bold transition-colors flex items-center justify-center gap-1.5 shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Save Design Picture</span>
+              </button>
+            </div>
+          )}
 
           {/* Quick Actions (WhatsApp & Invoice Side-by-Side) */}
           <div className="space-y-3">

@@ -171,23 +171,28 @@ export default function Footer({ setActivePage, onOpenPolicyModal }) {
             <ul className="space-y-2 text-xs font-medium font-body">
               <li>
                 <button onClick={() => { setActivePage('shop'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors text-left">
-                  Shop All Drops
+                  Shop All Archive
+                </button>
+              </li>
+              <li>
+                <button onClick={() => { setActivePage('shop'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors text-left">
+                  Half-Hand T-Shirts
+                </button>
+              </li>
+              <li>
+                <button onClick={() => { setActivePage('shop'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors text-left">
+                  Full-Hand T-Shirts
+                </button>
+              </li>
+              <li>
+                <button onClick={() => { setActivePage('shop'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors text-left">
+                  Custom Streetwear Hoodies
                 </button>
               </li>
               <li>
                 <button onClick={() => { setActivePage('customize'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors flex items-center gap-1.5 text-left">
-                  <span>Custom Studio</span>
+                  <span>Custom 1-of-1 Lab</span>
                   <span className="text-[9px] font-mono bg-brand-accent text-white px-1.5 rounded font-bold">1-OF-1</span>
-                </button>
-              </li>
-              <li>
-                <button onClick={() => { setActivePage('checkout'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors text-left">
-                  Order & Invoice
-                </button>
-              </li>
-              <li>
-                <button onClick={() => { setActivePage('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-brand-secondary transition-colors text-left">
-                  Brand Manifesto
                 </button>
               </li>
             </ul>

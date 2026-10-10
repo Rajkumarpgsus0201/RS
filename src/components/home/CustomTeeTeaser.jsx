@@ -49,10 +49,10 @@ export default function CustomTeeTeaser({ onCustomClick }) {
               </div>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-black text-brand-light uppercase tracking-tight leading-none">
                 YOUR DESIGN. <br />
-                <span className="text-brand-secondary">YOUR TEE.</span>
+                <span className="text-brand-secondary">TEES & HOODIES.</span>
               </h2>
               <p className="text-sm sm:text-base text-brand-muted mt-4 max-w-xl leading-relaxed font-body">
-                Break away from off-the-rack conformity. Design your bespoke graphic tee on our signature 240 GSM luxury French Terry blank with museum-grade digital pigment inks.
+                Break away from off-the-rack conformity. Design your bespoke pieces on our 240 GSM half-hand tees, 260 GSM full-hand tees, or 380 GSM heavyweight fleece hoodies with museum-grade digital pigment inks.
               </p>
             </div>
 

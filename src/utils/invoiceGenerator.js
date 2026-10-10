@@ -23,8 +23,15 @@ export function generateInvoiceHTML(order) {
   const itemsRows = items.map((item, index) => {
     const itemTotal = (item.price * item.quantity).toLocaleString('en-IN');
     const customBadge = item.isCustom 
-      ? `<div style="margin-top: 4px; font-size: 11px; color: #016935; font-weight: 600;">[1-OF-1 BESPOKE PRINT ${item.printPlacement ? `• ${item.printPlacement.toUpperCase()}` : ''}] ${item.customText ? `"${item.customText}"` : ''}</div>`
+      ? `<div style="margin-top: 4px; font-size: 11px; color: #016935; font-weight: 600;">[1-OF-1 BESPOKE PRINT ${item.printPlacement ? `• ${item.printPlacement.toUpperCase()}` : ''}] ${item.customText ? `"${item.customText}"` : ''}</div>` +
+        (item.customPreviewUrl ? `<div style="margin-top: 6px;"><img src="${item.customPreviewUrl}" alt="Custom Mockup" style="max-height: 75px; max-width: 75px; object-fit: contain; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px; background: #fff;" /></div>` : '')
       : '';
+
+    const loadBadge = item.isUpcoming
+      ? `<div style="margin-top: 4px; font-size: 11px; color: #d97706; font-weight: 700;">⚡ [IN THE LOAD // PRE-RESERVATION: ${item.loadStatus || 'Batch 02 Assembly'} • ETA: ${item.eta || 'Dropping Soon'}]</div>`
+      : '';
+
+    const gsmDisplay = item.gsm || (item.apparelType === 'hoodie' ? '380 GSM Fleece' : item.apparelType === 'fullhand' ? '260 GSM Cotton' : '240 GSM French Terry');
 
     return `
       <tr style="border-bottom: 1px solid #e5e7eb;">
@@ -34,9 +41,10 @@ export function generateInvoiceHTML(order) {
           <div style="font-size: 11px; color: #4b5563; margin-top: 2px;">
             Size: <strong style="color: #111;">${item.selectedSize || 'Standard'}</strong> &nbsp;|&nbsp; 
             Color: <strong style="color: #111;">${item.selectedColor?.name || 'Onyx Black'}</strong> &nbsp;|&nbsp; 
-            GSM: <strong>240 GSM French Terry</strong>
+            GSM: <strong>${gsmDisplay}</strong>
           </div>
           ${customBadge}
+          ${loadBadge}
         </td>
         <td style="padding: 12px 8px; text-align: center; font-family: monospace; font-size: 13px; font-weight: 600;">${item.quantity}</td>
         <td style="padding: 12px 8px; text-align: right; font-family: monospace; font-size: 13px;">₹${item.price.toLocaleString('en-IN')}</td>

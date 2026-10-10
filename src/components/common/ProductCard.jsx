@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, ShoppingBag, Eye, Check } from 'lucide-react';
+import { Heart, Plus, ShoppingBag, Eye, Check, MessageSquare, Clock, Sparkles } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { BRAND_CONFIG } from '../../data/products';
 
 export default function ProductCard({ product, onNavigateProduct }) {
   const { addToCart } = useCart();
@@ -22,6 +23,20 @@ export default function ProductCard({ product, onNavigateProduct }) {
       quantity: 1
     });
     setShowQuickSize(false);
+  };
+
+  const handleReserveWhatsApp = (e) => {
+    e.stopPropagation();
+    const text = encodeURIComponent(
+      `⚡ *RADNUZ STUDIO — IN THE LOAD PRE-RESERVE* ⚡\n\n` +
+      `Product: *${product.name}*\n` +
+      `Category: *${product.category}*\n` +
+      `Status: *${product.loadStatus || 'In Production Pipeline'}*\n` +
+      `Expected Arrival: *${product.eta || 'Dropping Soon'}*\n` +
+      `Color: *${selectedColor.name}*\n\n` +
+      `Please register my number for VIP Drop Alert / Pre-Reserve before the 50-piece drop goes live!`
+    );
+    window.open(`https://wa.me/${BRAND_CONFIG.businessWhatsApp}?text=${text}`, '_blank');
   };
 
   return (
@@ -66,7 +81,11 @@ export default function ProductCard({ product, onNavigateProduct }) {
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-start justify-between pointer-events-none">
           {product.badge && (
-            <span className="px-3 py-1 text-[10px] font-heading font-bold tracking-wider uppercase rounded-md bg-brand-dark/95 text-brand-secondary border border-brand-primary/40 shadow-md backdrop-blur-md">
+            <span className={`px-3 py-1 text-[10px] font-heading font-bold tracking-wider uppercase rounded-md shadow-md backdrop-blur-md ${
+              product.isUpcoming 
+                ? 'bg-brand-accent text-white border border-brand-accent/50 animate-pulse'
+                : 'bg-brand-dark/95 text-brand-secondary border border-brand-primary/40'
+            }`}>
               {product.badge}
             </span>
           )}
@@ -96,7 +115,7 @@ export default function ProductCard({ product, onNavigateProduct }) {
           </span>
         </div>
 
-        {/* Quick Add Overlay Drawer on Hover */}
+        {/* Quick Add / Reserve Overlay Drawer on Hover */}
         <AnimatePresence>
           {isHovered && (
             <motion.div
@@ -106,7 +125,16 @@ export default function ProductCard({ product, onNavigateProduct }) {
               transition={{ duration: 0.2 }}
               className="absolute bottom-3 right-3 left-3 z-10 flex flex-col items-center pointer-events-auto"
             >
-              {!showQuickSize ? (
+              {product.isUpcoming ? (
+                <button
+                  type="button"
+                  onClick={handleReserveWhatsApp}
+                  className="w-full flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-brand-primary hover:bg-brand-primaryLight text-white font-heading font-bold text-xs tracking-wider uppercase transition-all shadow-glow-primary group/btn"
+                >
+                  <MessageSquare className="w-3.5 h-3.5 text-brand-accent group-hover/btn:scale-110 transition-transform" />
+                  <span>PRE-RESERVE ON WHATSAPP</span>
+                </button>
+              ) : !showQuickSize ? (
                 <button
                   type="button"
                   onClick={(e) => {
@@ -207,6 +235,17 @@ export default function ProductCard({ product, onNavigateProduct }) {
             {selectedColor.name}
           </span>
         </div>
+
+        {/* Load Status Banner for Upcoming Pieces */}
+        {product.isUpcoming && (
+          <div className="flex items-center justify-between text-[10px] font-mono bg-brand-primary/10 border border-brand-primary/30 p-2 rounded-xl text-brand-secondary">
+            <span className="flex items-center gap-1.5 truncate">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-secondary animate-pulse shrink-0" />
+              <span className="truncate">{product.loadStatus}</span>
+            </span>
+            <span className="font-bold text-brand-chalk shrink-0 ml-1">{product.eta}</span>
+          </div>
+        )}
       </div>
     </div>
   );

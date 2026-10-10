@@ -7,6 +7,8 @@ export default function ControlPanel({
   tshirtColor,
   setTshirtColor,
   tshirtColors,
+  apparelType = 'halfhand',
+  setApparelType,
   size,
   setSize,
   fit,
@@ -63,8 +65,8 @@ export default function ControlPanel({
     setSelectedPresetId(null);
   };
 
-  // Base pricing logic
-  const basePrice = 1199;
+  // Base pricing logic by apparel type
+  const basePrice = apparelType === 'hoodie' ? 1899 : apparelType === 'fullhand' ? 1199 : 999;
   const placementFee = printPlacement === 'both' ? 299 : 0;
   const unitPrice = basePrice + placementFee;
   const totalPrice = unitPrice * quantity;
@@ -175,34 +177,55 @@ export default function ControlPanel({
               </div>
             </div>
 
-            {/* Fit Style */}
+            {/* Apparel Cut / Silhouette */}
             <div>
               <span className="text-xs font-heading uppercase text-brand-muted tracking-wider block mb-2">
-                Garment Silhouette
+                Garment Silhouette & Apparel Type
               </span>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 <button
-                  onClick={() => setFit('Boxy Oversized (240 GSM)')}
-                  className={`p-3.5 rounded-2xl border text-left transition-all ${
-                    fit.includes('Boxy')
-                      ? 'border-brand-primary bg-brand-primary/10'
+                  onClick={() => {
+                    if (setApparelType) setApparelType('halfhand');
+                    setFit('Half-Hand Boxy (240 GSM)');
+                  }}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    apparelType === 'halfhand'
+                      ? 'border-brand-primary bg-brand-primary/10 shadow-glow-primary'
                       : 'border-brand-border bg-brand-dark/50 hover:border-brand-muted'
                   }`}
                 >
-                  <div className="font-display font-bold text-xs text-brand-light">BOXY OVERSIZED</div>
-                  <div className="text-[10px] font-mono text-brand-secondary mt-0.5">240 GSM // Drop-Shoulder</div>
+                  <div className="font-display font-bold text-xs text-brand-light">HALF-HAND TEE</div>
+                  <div className="text-[10px] font-mono text-brand-secondary mt-0.5">240 GSM // ₹999</div>
                 </button>
 
                 <button
-                  onClick={() => setFit('Standard Street Fit (220 GSM)')}
-                  className={`p-3.5 rounded-2xl border text-left transition-all ${
-                    fit.includes('Standard')
-                      ? 'border-brand-primary bg-brand-primary/10'
+                  onClick={() => {
+                    if (setApparelType) setApparelType('fullhand');
+                    setFit('Full-Hand Long Sleeve (260 GSM)');
+                  }}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    apparelType === 'fullhand'
+                      ? 'border-brand-primary bg-brand-primary/10 shadow-glow-primary'
                       : 'border-brand-border bg-brand-dark/50 hover:border-brand-muted'
                   }`}
                 >
-                  <div className="font-display font-bold text-xs text-brand-light">STANDARD STREET</div>
-                  <div className="text-[10px] font-mono text-brand-secondary mt-0.5">220 GSM // Classic drape</div>
+                  <div className="font-display font-bold text-xs text-brand-light">FULL-HAND TEE</div>
+                  <div className="text-[10px] font-mono text-brand-secondary mt-0.5">260 GSM // ₹1,199</div>
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (setApparelType) setApparelType('hoodie');
+                    setFit('Streetwear Hoodie (380 GSM)');
+                  }}
+                  className={`p-3 rounded-2xl border text-left transition-all ${
+                    apparelType === 'hoodie'
+                      ? 'border-brand-primary bg-brand-primary/10 shadow-glow-primary'
+                      : 'border-brand-border bg-brand-dark/50 hover:border-brand-muted'
+                  }`}
+                >
+                  <div className="font-display font-bold text-xs text-brand-light">HOODIE</div>
+                  <div className="text-[10px] font-mono text-brand-secondary mt-0.5">380 GSM // ₹1,899</div>
                 </button>
               </div>
             </div>
@@ -488,7 +511,7 @@ export default function ControlPanel({
 
           <div className="text-right">
             <span className="text-[10px] font-heading text-brand-muted uppercase block font-medium">
-              Total ({quantity} Tee{quantity > 1 ? 's' : ''})
+              Total ({quantity} {apparelType === 'hoodie' ? 'Hoodie' : 'Tee'}{quantity > 1 ? 's' : ''})
             </span>
             <span className="text-xl font-mono font-black text-brand-light">
               ₹{totalPrice}

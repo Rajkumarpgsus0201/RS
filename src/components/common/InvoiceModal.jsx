@@ -161,11 +161,20 @@ export default function InvoiceModal({ isOpen, onClose, order }) {
                         <div className="text-[11px] text-gray-500 mt-0.5">
                           Size: <strong className="text-gray-800">{item.selectedSize}</strong> • 
                           Color: <strong className="text-gray-800">{item.selectedColor?.name || 'Black'}</strong> • 
-                          240 GSM French Terry
+                          {item.gsm || (item.apparelType === 'hoodie' ? '380 GSM Fleece' : item.apparelType === 'fullhand' ? '260 GSM Cotton' : '240 GSM French Terry')}
                         </div>
                         {item.customText && (
                           <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">
                             Custom Print Text: "{item.customText}"
+                          </div>
+                        )}
+                        {item.customPreviewUrl && (
+                          <div className="mt-1.5">
+                            <img
+                              src={item.customPreviewUrl}
+                              alt="Mockup Thumbnail"
+                              className="w-12 h-14 object-contain rounded border border-gray-300 bg-white"
+                            />
                           </div>
                         )}
                       </td>

@@ -12,6 +12,7 @@ import Toast from './components/common/Toast';
 import SearchModal from './components/common/SearchModal';
 import CartDrawer from './components/cart/CartDrawer';
 import PolicyModal from './components/common/PolicyModal';
+import CommunityPopup from './components/common/CommunityPopup';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -32,11 +33,17 @@ export default function App() {
   // Policy Modal state
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState(false);
   const [policyModalTab, setPolicyModalTab] = useState('whatsapp');
+  const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false);
 
   const handleOpenPolicy = (tab = 'whatsapp') => {
     setPolicyModalTab(tab);
     setIsPolicyModalOpen(true);
   };
+
+  // Show the community invite when a visitor enters the site.
+  useEffect(() => {
+    setIsCommunityPopupOpen(true);
+  }, []);
 
   // Keyboard shortcut: Cmd+K or Ctrl+K to open search
   useEffect(() => {
@@ -159,6 +166,11 @@ export default function App() {
             isOpen={isPolicyModalOpen}
             onClose={() => setIsPolicyModalOpen(false)}
             initialTab={policyModalTab}
+          />
+
+          <CommunityPopup
+            isOpen={isCommunityPopupOpen}
+            onClose={() => setIsCommunityPopupOpen(false)}
           />
 
           {/* 7. Notification Toasts */}

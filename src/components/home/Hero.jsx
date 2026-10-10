@@ -79,15 +79,15 @@ export default function Hero({ onShopClick, onCustomClick }) {
 
             {/* Oversized Streetwear Tee Image */}
             <img
-              src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1000&auto=format&fit=crop"
-              alt="RADNUZ Heavyweight Streetwear Oversized Tee"
+              src="https://res.cloudinary.com/dapilmiei/image/upload/v1791632970/aj-back_pblqgr.png"
+              alt="RADNUZ Ajith Still 240 GSM Streetwear Oversized Tee"
               className="w-full h-full object-contain filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)] z-10 transition-transform duration-500 group-hover:-translate-y-2"
             />
 
-            {/* Interactive "CUSTOMIZE ME" badge floating on tee */}
+            {/* Interactive "DROP 01 LIVE" badge floating on tee */}
             <div className="absolute z-20 bottom-8 px-4 py-2 rounded-full bg-brand-surface/90 border border-brand-primary text-brand-secondary text-xs font-heading font-bold tracking-wider backdrop-blur-md shadow-2xl flex items-center gap-2 group-hover:bg-brand-primary group-hover:text-white transition-all">
-              <span className="w-2 h-2 rounded-full bg-brand-accent" />
-              <span>CLICK TO CUSTOMIZE THIS TEE</span>
+              <span className="w-2 h-2 rounded-full bg-brand-accent animate-ping" />
+              <span>AJITH STILL // 240 GSM DROP 01 LIVE</span>
             </div>
           </motion.div>
         </div>

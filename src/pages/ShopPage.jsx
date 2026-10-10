@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Filter, SlidersHorizontal, Grid2X2, Grid3X3, X, ArrowUpDown, Sparkles, Search } from 'lucide-react';
-import { PRODUCTS, CATEGORIES } from '../data/products';
+import { Filter, SlidersHorizontal, Grid2X2, Grid3X3, X, ArrowUpDown, Sparkles, Search, MessageSquare, Clock } from 'lucide-react';
+import { PRODUCTS, CATEGORIES, BRAND_CONFIG } from '../data/products';
 import ProductCard from '../components/common/ProductCard';
 
 export default function ShopPage({ onNavigateProduct, initialCategory = 'All' }) {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
-  const [maxPrice, setMaxPrice] = useState(2000);
+  const [maxPrice, setMaxPrice] = useState(3000);
   const [sortBy, setSortBy] = useState('featured'); // 'featured' | 'price-asc' | 'price-desc' | 'rating'
   const [searchQuery, setSearchQuery] = useState('');
   const [gridLayout, setGridLayout] = useState('grid-3'); // 'grid-2' | 'grid-3'
@@ -30,8 +30,18 @@ export default function ShopPage({ onNavigateProduct, initialCategory = 'All' })
     return PRODUCTS.filter((product) => {
       // Category Filter
       if (selectedCategory !== 'All' && selectedCategory !== 'ALL ARCHIVE') {
-        if (product.category.toLowerCase() !== selectedCategory.toLowerCase()) {
-          return false;
+        const catNorm = selectedCategory.toLowerCase();
+        if (catNorm.includes('load') || catNorm.includes('dropping soon')) {
+          if (!product.isUpcoming) return false;
+        } else {
+          const prodCatNorm = product.category.toLowerCase();
+          const matches = prodCatNorm === catNorm ||
+            (catNorm.includes('half') && prodCatNorm.includes('half')) ||
+            (catNorm.includes('full') && prodCatNorm.includes('full')) ||
+            (catNorm.includes('hoodie') && prodCatNorm.includes('hoodie'));
+          if (!matches) {
+            return false;
+          }
         }
       }
 
@@ -346,6 +356,57 @@ export default function ShopPage({ onNavigateProduct, initialCategory = 'All' })
             </div>
           )}
 
+          {/* In-Load Pipeline Alert & Concierge Banner */}
+          {(selectedCategory.toLowerCase().includes('load') || selectedCategory.toLowerCase().includes('dropping')) ? (
+            <div className="p-6 rounded-3xl bg-gradient-to-r from-brand-primary/20 via-brand-surface to-brand-elevated border-2 border-brand-primaryLight shadow-glow-primary/20 relative overflow-hidden">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1.5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/30 border border-brand-primary text-brand-secondary text-[11px] font-mono font-bold">
+                    <span className="w-2 h-2 rounded-full bg-brand-accent animate-ping" />
+                    <span>BATCH 02 // OTHERS IN PRODUCTION LOAD</span>
+                  </div>
+                  <h3 className="text-xl font-heading font-extrabold text-brand-light uppercase">
+                    ADVANCE PRE-RESERVATIONS NOW OPEN
+                  </h3>
+                  <p className="text-xs text-brand-muted max-w-xl font-body leading-relaxed">
+                    These pieces are currently in knitting, acid-wash, and assembly stages. You can reserve your size directly on WhatsApp with zero advance payment. We will notify you with dispatch photos before shipping.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(
+                      `⚡ *RADNUZ STUDIO — VIP BATCH 02 DROP INQUIRY* ⚡\n\n` +
+                      `Hey Radnuz team, I'm checking out the pieces currently in the production load.\n` +
+                      `Please share more details on the release dates and VIP reservation list!`
+                    );
+                    window.open(`https://wa.me/${BRAND_CONFIG.businessWhatsApp}?text=${text}`, '_blank');
+                  }}
+                  className="shrink-0 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white text-xs font-heading font-extrabold uppercase tracking-wider transition-all shadow-glow-accent"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>WHATSAPP VIP DROP CONCIERGE</span>
+                </button>
+              </div>
+            </div>
+          ) : selectedCategory === 'All' ? (
+            <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-brand-surface border border-brand-border/80 text-xs">
+              <div className="flex items-center gap-2.5 truncate">
+                <span className="w-2 h-2 rounded-full bg-brand-accent animate-pulse shrink-0" />
+                <span className="font-heading font-bold text-brand-light">
+                  FACTORY UPDATE: <span className="text-brand-secondary font-normal font-mono">4 upcoming heavyweight drops are currently in the load / pipeline.</span>
+                </span>
+              </div>
+              <button
+                onClick={() => setSelectedCategory('⚡ IN THE LOAD // DROPPING SOON')}
+                className="shrink-0 text-brand-secondary hover:text-white font-heading font-bold uppercase text-[11px] underline underline-offset-4 flex items-center gap-1"
+              >
+                <span>EXPLORE IN-LOAD DROPS</span>
+                <ArrowUpDown className="w-3 h-3 rotate-90" />
+              </button>
+            </div>
+          ) : null}
+
           {/* Product Grid */}
           {filteredProducts.length > 0 ? (
             <div
@@ -363,11 +424,80 @@ export default function ShopPage({ onNavigateProduct, initialCategory = 'All' })
                 />
               ))}
             </div>
+          ) : selectedCategory.toLowerCase().includes('hoodie') ? (
+            <div className="p-8 sm:p-14 bg-brand-surface rounded-3xl border-2 border-brand-primary/40 text-center space-y-5 shadow-card-rich">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/20 border border-brand-primary text-brand-secondary text-xs font-mono font-bold">
+                <span className="w-2.5 h-2.5 rounded-full bg-brand-accent animate-ping" />
+                <span>HOODIES // WAITING IN THE LOAD (BATCH 02)</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-display font-black text-brand-light uppercase">
+                380 GSM & 420 GSM HOODIES ARE CURRENTLY IN PRODUCTION
+              </h3>
+              <p className="text-xs sm:text-sm text-brand-muted max-w-lg mx-auto font-body leading-relaxed">
+                Macha, real heavyweight French Terry Fleece hoodies are currently in the knitting, acid wash & hardware assembly pipeline. No dummy photos — only real drops! Pre-reserve on WhatsApp now to get notified first.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(
+                      `⚡ *RADNUZ STUDIO — HOODIE PRE-RESERVE REQUEST* ⚡\n\n` +
+                      `Hey Radnuz team, please add my number to the Batch 02 Hoodie Drop alert list.\n` +
+                      `I want to pre-reserve a 380-420 GSM Heavyweight Hoodie as soon as the load arrives!`
+                    );
+                    window.open(`https://wa.me/${BRAND_CONFIG.businessWhatsApp}?text=${text}`, '_blank');
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 bg-brand-accent hover:bg-brand-accentHover text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-glow-accent"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>PRE-RESERVE HOODIE ON WHATSAPP (₹0 ADVANCE)</span>
+                </button>
+                <button
+                  onClick={() => setSelectedCategory('Half-Hand T-Shirts')}
+                  className="w-full sm:w-auto px-6 py-4 bg-brand-elevated text-brand-light border border-brand-border hover:bg-brand-surface font-heading font-bold text-xs uppercase rounded-xl transition-all"
+                >
+                  SHOP 3 LIVE HALF-HAND TEES →
+                </button>
+              </div>
+            </div>
+          ) : selectedCategory.toLowerCase().includes('full') ? (
+            <div className="p-8 sm:p-14 bg-brand-surface rounded-3xl border-2 border-brand-primary/40 text-center space-y-5 shadow-card-rich">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-primary/20 border border-brand-primary text-brand-secondary text-xs font-mono font-bold">
+                <span className="w-2.5 h-2.5 rounded-full bg-brand-accent animate-ping" />
+                <span>FULL-HAND TEES // IN PRODUCTION LOAD</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-display font-black text-brand-light uppercase">
+                260 GSM FULL-HAND TEES DROPPING IN BATCH 02
+              </h3>
+              <p className="text-xs sm:text-sm text-brand-muted max-w-lg mx-auto font-body leading-relaxed">
+                Architectural long-sleeve tees with reinforced 2x2 ribbed cuffs are in production. Tap below to pre-reserve on WhatsApp!
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <button
+                  onClick={() => {
+                    const text = encodeURIComponent(
+                      `⚡ *RADNUZ STUDIO — FULL-HAND TEE PRE-RESERVE* ⚡\n\n` +
+                      `Hey Radnuz team, please add my number to the Full-Hand 260 GSM drop list!`
+                    );
+                    window.open(`https://wa.me/${BRAND_CONFIG.businessWhatsApp}?text=${text}`, '_blank');
+                  }}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 bg-brand-accent hover:bg-brand-accentHover text-white font-heading font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-glow-accent"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>PRE-RESERVE ON WHATSAPP (₹0 ADVANCE)</span>
+                </button>
+                <button
+                  onClick={() => setSelectedCategory('Half-Hand T-Shirts')}
+                  className="w-full sm:w-auto px-6 py-4 bg-brand-elevated text-brand-light border border-brand-border hover:bg-brand-surface font-heading font-bold text-xs uppercase rounded-xl transition-all"
+                >
+                  SHOP 3 LIVE HALF-HAND TEES →
+                </button>
+              </div>
+            </div>
           ) : (
             <div className="text-center py-20 bg-brand-surface rounded-3xl border border-brand-border p-8 shadow-card-rich">
               <h3 className="text-xl font-display font-bold text-brand-light">NO PIECES MATCH YOUR CRITERIA</h3>
               <p className="text-xs text-brand-muted max-w-sm mx-auto mt-2 font-body">
-                Try loosening your filters or explore our custom atelier to design your own 1-of-1 drop.
+                Try loosening your filters or explore our 3 signature live half-hand tees.
               </p>
               <button
                 onClick={clearAllFilters}

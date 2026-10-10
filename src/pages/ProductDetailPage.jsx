@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, ShoppingBag, MessageSquare, Truck, ShieldCheck, RefreshCw, HelpCircle, ChevronDown, Star, Sparkles, Check, ArrowRight } from 'lucide-react';
+import { Heart, ShoppingBag, MessageSquare, Truck, ShieldCheck, RefreshCw, HelpCircle, ChevronDown, Star, Sparkles, Check, ArrowRight, Clock, Flame, CheckCircle2 } from 'lucide-react';
 import { PRODUCTS, BRAND_CONFIG } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -18,6 +18,14 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
   const [quantity, setQuantity] = useState(1);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState('fabric'); // 'fabric' | 'care' | 'shipping'
+
+  // Update selectedImage and color when productId changes
+  React.useEffect(() => {
+    if (product) {
+      setSelectedImage(product.images.primary);
+      setSelectedColor(product.colors[0]);
+    }
+  }, [product.id]);
 
   const isWishlisted = isInWishlist(product.id);
 
@@ -47,6 +55,23 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
       `Quantity: *${quantity}*\n` +
       `Price: *₹${product.price * quantity}*\n\n` +
       `Please verify availability and share payment link / QR.`
+    );
+    window.open(`https://wa.me/${BRAND_CONFIG.businessWhatsApp}?text=${text}`, '_blank');
+  };
+
+  const handleReserveWhatsApp = () => {
+    const text = encodeURIComponent(
+      `⚡ *RADNUZ STUDIO — IN-LOAD PRE-RESERVATION (BATCH 02)* ⚡\n\n` +
+      `Product: *${product.name}*\n` +
+      `Category: *${product.category}*\n` +
+      `Weight/Fit: *${product.gsm} // ${product.fit}*\n` +
+      `Selected Size: *${selectedSize}*\n` +
+      `Color: *${selectedColor.name}*\n` +
+      `Quantity: *${quantity}*\n` +
+      `Estimated Total: *₹${product.price * quantity}*\n` +
+      `Current Factory Stage: *${product.loadStatus || 'In Assembly Pipeline'}*\n` +
+      `Expected Arrival ETA: *${product.eta || 'Drop 02'}*\n\n` +
+      `Hey Radnuz team, please pre-reserve this piece for me! Notify me on WhatsApp as soon as this load lands.`
     );
     window.open(`https://wa.me/${BRAND_CONFIG.businessWhatsApp}?text=${text}`, '_blank');
   };
@@ -200,9 +225,16 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
               <div className="flex items-center justify-between text-xs font-heading mb-2.5">
                 <div className="flex items-center gap-2">
                   <span className="text-brand-muted uppercase tracking-wider font-semibold">Select Size</span>
-                  <span className="text-[10px] text-brand-secondary font-bold bg-brand-primary/20 px-2 py-0.5 rounded-md">
-                    Only 3 left in {selectedSize}!
-                  </span>
+                  {product.isUpcoming ? (
+                    <span className="text-[10px] text-brand-secondary font-bold bg-brand-primary/20 px-2 py-0.5 rounded-md flex items-center gap-1 border border-brand-primary/30">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-ping" />
+                      <span>BATCH 02 LOAD // RESERVE NOW</span>
+                    </span>
+                  ) : (
+                    <span className="text-[10px] text-brand-secondary font-bold bg-brand-primary/20 px-2 py-0.5 rounded-md">
+                      Only 3 left in {selectedSize}!
+                    </span>
+                  )}
                 </div>
                 <button
                   onClick={() => setIsSizeGuideOpen(true)}
@@ -230,6 +262,54 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
               </div>
             </div>
 
+            {/* In-Load Pipeline Tracker Box if product is upcoming */}
+            {product.isUpcoming && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-brand-surface border border-brand-primary/40 shadow-glow-primary/10 space-y-3.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-brand-accent animate-ping" />
+                    <span className="text-xs font-heading font-extrabold uppercase text-brand-secondary tracking-wider">
+                      PRODUCTION LOAD STATUS
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-brand-chalk px-2.5 py-0.5 rounded-md bg-brand-dark/90 border border-brand-secondary/30">
+                    DROP ETA: {product.eta || 'Drop 02'}
+                  </span>
+                </div>
+
+                <div className="text-xs text-brand-muted">
+                  Current Factory Stage: <span className="text-brand-light font-bold font-mono">{product.loadStatus}</span>
+                </div>
+
+                {/* 4-Stage Progress Visualizer */}
+                <div className="grid grid-cols-4 gap-2 pt-1 text-center">
+                  <div className="p-2 rounded-xl bg-brand-elevated border border-emerald-500/30">
+                    <div className="text-[10px] font-heading font-bold text-emerald-400">STAGE 01</div>
+                    <div className="text-[9px] font-mono text-brand-muted mt-0.5">Yarn Knit ✓</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-brand-elevated border border-emerald-500/30">
+                    <div className="text-[10px] font-heading font-bold text-emerald-400">STAGE 02</div>
+                    <div className="text-[9px] font-mono text-brand-muted mt-0.5">Graphics ✓</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-brand-primary/20 border border-brand-primaryLight shadow-sm">
+                    <div className="text-[10px] font-heading font-bold text-brand-secondary flex items-center justify-center gap-1">
+                      <span>STAGE 03</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-pulse" />
+                    </div>
+                    <div className="text-[9px] font-mono text-brand-light font-bold mt-0.5">In Load ⚡</div>
+                  </div>
+                  <div className="p-2 rounded-xl bg-brand-surface border border-brand-border/60 opacity-60">
+                    <div className="text-[10px] font-heading font-bold text-brand-muted">STAGE 04</div>
+                    <div className="text-[9px] font-mono text-brand-muted mt-0.5">Public Drop</div>
+                  </div>
+                </div>
+
+                <p className="text-[11px] font-mono text-brand-chalk/80 leading-relaxed border-t border-brand-border/60 pt-2.5">
+                  💡 <strong className="text-brand-light">₹0 Advance Required:</strong> Reserve your size now. The Radnuz concierge team will contact you on WhatsApp with high-res photos the moment stock touches down.
+                </p>
+              </div>
+            )}
+
             {/* Quantity Selector */}
             <div className="flex items-center gap-4 pt-2">
               <span className="text-xs font-heading text-brand-muted uppercase tracking-wider font-semibold">Quantity</span>
@@ -252,24 +332,44 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
               </div>
             </div>
 
-            {/* Actions: Add to Cart & Buy via WhatsApp */}
-            <div className="space-y-3 pt-4">
-              <button
-                onClick={handleAddToCart}
-                className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl bg-brand-primary hover:bg-brand-primaryLight text-white font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-glow-primary group"
-              >
-                <ShoppingBag className="w-4 h-4 text-brand-accent" />
-                <span>ADD TO BAG — ₹{product.price * quantity}</span>
-              </button>
+            {/* Actions: Add to Cart & Buy/Pre-Reserve via WhatsApp */}
+            {product.isUpcoming ? (
+              <div className="space-y-3 pt-4">
+                <button
+                  onClick={handleReserveWhatsApp}
+                  className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-glow-accent group"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>PRE-RESERVE ON WHATSAPP (₹0 ADVANCE)</span>
+                </button>
 
-              <button
-                onClick={handleWhatsAppOrder}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-glow-accent"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>DIRECT ORDER VIA WHATSAPP</span>
-              </button>
-            </div>
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl bg-brand-primary hover:bg-brand-primaryLight text-white font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-glow-primary"
+                >
+                  <ShoppingBag className="w-4 h-4 text-brand-secondary" />
+                  <span>ADD TO BAG FOR DROP ALERT (₹{product.price * quantity})</span>
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3 pt-4">
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl bg-brand-primary hover:bg-brand-primaryLight text-white font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-glow-primary group"
+                >
+                  <ShoppingBag className="w-4 h-4 text-brand-accent" />
+                  <span>ADD TO BAG — ₹{product.price * quantity}</span>
+                </button>
+
+                <button
+                  onClick={handleWhatsAppOrder}
+                  className="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl bg-brand-accent hover:bg-brand-accentHover text-white font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-glow-accent"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>DIRECT ORDER VIA WHATSAPP</span>
+                </button>
+              </div>
+            )}
 
             {/* Feature Highlights */}
             <div className="grid grid-cols-2 gap-3 pt-2 text-[11px] font-heading font-semibold text-brand-muted">
