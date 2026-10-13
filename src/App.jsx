@@ -57,6 +57,44 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Global Image Protection: Block image right-click save, dragging, and save shortcuts
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      if (
+        e.target.tagName === 'IMG' ||
+        e.target.closest('img') ||
+        e.target.closest('.protected-container') ||
+        e.target.closest('[data-protected-image]')
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    const handleDragStart = (e) => {
+      if (e.target.tagName === 'IMG' || e.target.closest('img')) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('dragstart', handleDragStart);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('dragstart', handleDragStart);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const navigateToProduct = (productId) => {
     setSelectedProductId(productId);
     setActivePage('product');

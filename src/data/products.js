@@ -1,5 +1,41 @@
 export const PRODUCTS = [
   {
+    id: "radnuz-thalapathy-tamil-pride-polo",
+    name: "THALAPATHY TAMIL PRIDE POLO // 240 GSM",
+    slug: "thalapathy-tamil-pride-polo",
+    category: "Polo T-Shirts",
+    apparelType: "polo",
+    price: 449,
+    originalPrice: 899,
+    badge: "🔥 TRENDING // VIP DROP",
+    isFeatured: true,
+    isNew: true,
+    rating: 5.0,
+    reviewsCount: 4,
+    gsm: "240 GSM",
+    fabric: "100% Combed Compact Pique Cotton",
+    fit: "Streetwear Collar Polo Fit",
+    description: "Trending 'Thalapathy Tamil Pride Polo' tribute edition. Features a seamless all-in-one graphic design capturing both the front chest emblem and high-impact back identity in a single signature piece. Crafted on heavyweight 240 GSM combed pique cotton with reinforced rib knit collar, double-needle stitched placket, and lifetime wash-fastness.",
+    colors: [
+      { name: "Onyx Black", hex: "#141416", class: "bg-[#141416]" },
+      { name: "Vintage Chalk", hex: "#E8E8E4", class: "bg-[#E8E8E4]" },
+      { name: "Washed Charcoal", hex: "#2A2B30", class: "bg-[#2A2B30]" }
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    images: {
+      primary: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png",
+      secondary: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png",
+      model: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png",
+      detail: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png"
+    },
+    features: [
+      "240 GSM Premium Combed Compact Pique Cotton",
+      "Unified All-In-One Front & Back Thalapathy Tamil Pride Artwork",
+      "Anti-roll rib knit collar & reinforced double-stitch placket",
+      "High-density cured pigment print resistant to 60+ washes"
+    ]
+  },
+  {
     id: "radnuz-ajith-still",
     name: "AJITH STILL // HALF-HAND TEE // 240 GSM",
     slug: "ajith-still-half-hand-tee",
@@ -11,7 +47,7 @@ export const PRODUCTS = [
     isFeatured: true,
     isNew: true,
     rating: 5.0,
-    reviewsCount: 218,
+    reviewsCount: 4,
     gsm: "240 GSM",
     fabric: "100% French Terry Combed Cotton",
     fit: "Half-Hand Boxy Oversized Streetwear Fit",
@@ -47,7 +83,7 @@ export const PRODUCTS = [
     isFeatured: true,
     isNew: true,
     rating: 5.0,
-    reviewsCount: 194,
+    reviewsCount: 3,
     gsm: "240 GSM",
     fabric: "100% Combed French Terry Cotton",
     fit: "Half-Hand Boxy Oversized Streetwear Fit",
@@ -83,7 +119,7 @@ export const PRODUCTS = [
     isFeatured: true,
     isNew: true,
     rating: 5.0,
-    reviewsCount: 312,
+    reviewsCount: 3,
     gsm: "240 GSM",
     fabric: "100% Combed Compact Cotton",
     fit: "Half-Hand Boxy Oversized Streetwear Fit",
@@ -113,9 +149,16 @@ export const CATEGORIES = [
   {
     id: "all",
     name: "ALL ARCHIVE",
-    count: 3,
+    count: 4,
     description: "Current live drops and production pipeline.",
-    image: "https://res.cloudinary.com/dapilmiei/image/upload/v1791632970/aj-back_pblqgr.png"
+    image: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png"
+  },
+  {
+    id: "polo",
+    name: "POLO T-SHIRTS",
+    count: 1,
+    description: "240 GSM trending collar polo cuts: Thalapathy Tamil Pride Polo.",
+    image: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png"
   },
   {
     id: "half-hand",
@@ -148,6 +191,12 @@ export const PRESET_CUSTOM_GRAPHICS = [
     name: "RADNUZ Metallic Emblem",
     category: "Signature",
     svgUrl: "/radnuz-logo.png"
+  },
+  {
+    id: "g-thalapathy-tvk",
+    name: "Thalapathy Tamil Pride Graphic",
+    category: "Tribute",
+    svgUrl: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png"
   },
   {
     id: "g-ajith-still",
@@ -202,6 +251,17 @@ export const LOOKBOOK_REVIEWS = [
     text: "Thala Thalapathy dual artwork back print is fire 🔥. Back print looks massive and high-contrast. 240 GSM weight feels luxurious. 10/10 recommendation!",
     product: "THALA THALAPATHY // HALF-HAND TEE // 240 GSM",
     sizeOrdered: "M (Boxy fit)"
+  },
+  {
+    id: 4,
+    author: "Karthik V.",
+    location: "Trichy, IN",
+    avatar: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png",
+    fitImage: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png",
+    rating: 5,
+    text: "Thalapathy Tamil Pride Polo is pure fire 🔥! Both front and back prints look super crisp, and at ₹449 the 240 GSM pique fabric feels unbelievably premium.",
+    product: "THALAPATHY TAMIL PRIDE POLO // 240 GSM",
+    sizeOrdered: "L (Streetwear Fit)"
   }
 ];
 

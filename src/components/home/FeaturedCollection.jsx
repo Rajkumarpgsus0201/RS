@@ -8,6 +8,7 @@ export default function FeaturedCollection({ onNavigateProduct, onShopClick }) {
 
   const filters = [
     { label: 'ALL', id: 'ALL' },
+    { label: 'POLO', id: 'POLO' },
     { label: 'HALF-HAND', id: 'HALF' },
     { label: 'HOODIES (IN LOAD)', id: 'HOODIE' },
     { label: 'FULL-HAND (IN LOAD)', id: 'FULL' }
@@ -18,6 +19,7 @@ export default function FeaturedCollection({ onNavigateProduct, onShopClick }) {
   const filteredProducts = activeFilter === 'ALL'
     ? featuredList
     : featuredList.filter(p => {
+        if (activeFilter === 'POLO') return p.category.toLowerCase().includes('polo') || p.apparelType === 'polo';
         if (activeFilter === 'HALF') return p.category.toLowerCase().includes('half');
         if (activeFilter === 'FULL') return p.category.toLowerCase().includes('full');
         if (activeFilter === 'HOODIE') return p.category.toLowerCase().includes('hoodie');

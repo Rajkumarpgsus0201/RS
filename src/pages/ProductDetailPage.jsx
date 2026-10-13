@@ -29,13 +29,13 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
 
   const isWishlisted = isInWishlist(product.id);
 
-  // Gallery image list
-  const galleryImages = [
+  // Gallery image list (deduplicated unique views)
+  const galleryImages = Array.from(new Set([
     product.images.primary,
     product.images.secondary,
     product.images.model,
     product.images.detail
-  ].filter(Boolean);
+  ].filter(Boolean)));
 
   const handleAddToCart = () => {
     addToCart({
@@ -94,40 +94,54 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
         {/* Left: Multi-Image Editorial Gallery (Span 7 cols) */}
         <div className="lg:col-span-7 flex flex-col-reverse md:flex-row gap-4">
-          {/* Thumbnail Strip */}
-          <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar shrink-0 md:w-20">
-            {galleryImages.map((imgUrl, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedImage(imgUrl)}
-                className={`relative aspect-[4/5] w-16 md:w-full rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                  selectedImage === imgUrl
-                    ? 'border-brand-primaryLight ring-2 ring-brand-primary/30'
-                    : 'border-brand-border hover:border-brand-muted opacity-70 hover:opacity-100'
-                }`}
-              >
-                <img
-                  src={imgUrl}
-                  alt={`${product.name} angle ${idx + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
+          {/* Thumbnail Strip (Only show when there are multiple distinct images) */}
+          {galleryImages.length > 1 && (
+            <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar shrink-0 md:w-20">
+              {galleryImages.map((imgUrl, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImage(imgUrl)}
+                  className={`relative aspect-[4/5] w-16 md:w-full rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                    selectedImage === imgUrl
+                      ? 'border-brand-primaryLight ring-2 ring-brand-primary/30'
+                      : 'border-brand-border hover:border-brand-muted opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <img
+                    src={imgUrl}
+                    alt={`${product.name} angle ${idx + 1}`}
+                    draggable="false"
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
 
-          {/* Main Large Stage Image */}
-          <div className="relative flex-1 aspect-[4/5] rounded-3xl overflow-hidden bg-brand-surface border border-brand-border group shadow-card-rich">
+          {/* Main Large Stage Image with Anti-Download Protection */}
+          <div 
+            onContextMenu={(e) => e.preventDefault()}
+            onDragStart={(e) => e.preventDefault()}
+            data-protected-image="true"
+            className="relative flex-1 aspect-[4/5] rounded-3xl overflow-hidden bg-brand-surface border border-brand-border group shadow-card-rich select-none protected-container"
+          >
             <img
               src={selectedImage}
               alt={product.name}
-              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              draggable="false"
+              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 select-none pointer-events-none"
             />
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
               {product.badge && (
                 <span className="px-3.5 py-1 text-xs font-heading font-bold uppercase rounded-lg bg-brand-dark/95 text-brand-secondary border border-brand-primary/40 backdrop-blur-md shadow-md">
                   {product.badge}
+                </span>
+              )}
+              {galleryImages.length <= 1 && (
+                <span className="px-3 py-1 text-[11px] font-heading font-bold uppercase rounded-lg bg-brand-primary text-white border border-brand-primaryLight/40 backdrop-blur-md shadow-glow-primary">
+                  ⚡ COMPLETE FRONT & BACK VIEW
                 </span>
               )}
               <span className="px-3 py-0.5 text-[10px] font-mono text-brand-chalk/90 bg-brand-dark/80 rounded-md backdrop-blur-sm border border-white/10">
@@ -135,10 +149,15 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
               </span>
             </div>
 
+            {/* Anti-Download Shield & Watermark Tag */}
+            <div className="absolute bottom-4 right-4 z-20 pointer-events-none select-none px-2.5 py-1 rounded bg-brand-black/60 backdrop-blur-md text-[9px] font-mono text-white/50 border border-white/10 uppercase tracking-widest">
+              🔒 RADNUZ ARCHIVE PROTECTED
+            </div>
+
             {/* Wishlist Button */}
             <button
               onClick={() => toggleWishlist(product.id)}
-              className={`absolute top-4 right-4 p-3 rounded-full transition-all backdrop-blur-md ${
+              className={`absolute top-4 right-4 z-20 p-3 rounded-full transition-all backdrop-blur-md ${
                 isWishlisted
                   ? 'bg-brand-accent text-white scale-110 shadow-lg'
                   : 'bg-brand-dark/70 text-brand-muted hover:text-white hover:bg-brand-dark'

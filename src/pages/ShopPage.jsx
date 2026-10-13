@@ -38,7 +38,8 @@ export default function ShopPage({ onNavigateProduct, initialCategory = 'All' })
           const matches = prodCatNorm === catNorm ||
             (catNorm.includes('half') && prodCatNorm.includes('half')) ||
             (catNorm.includes('full') && prodCatNorm.includes('full')) ||
-            (catNorm.includes('hoodie') && prodCatNorm.includes('hoodie'));
+            (catNorm.includes('hoodie') && prodCatNorm.includes('hoodie')) ||
+            (catNorm.includes('polo') && prodCatNorm.includes('polo'));
           if (!matches) {
             return false;
           }
@@ -196,16 +197,16 @@ export default function ShopPage({ onNavigateProduct, initialCategory = 'All' })
               </div>
               <input
                 type="range"
-                min="800"
-                max="2000"
-                step="50"
+                min="400"
+                max="2500"
+                step="25"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(parseInt(e.target.value))}
                 className="w-full accent-brand-primary cursor-pointer"
               />
               <div className="flex justify-between text-[10px] font-mono text-brand-muted mt-1">
-                <span>₹800</span>
-                <span>₹2000</span>
+                <span>₹400</span>
+                <span>₹2500</span>
               </div>
             </div>
 
@@ -579,13 +580,17 @@ export default function ShopPage({ onNavigateProduct, initialCategory = 'All' })
                   </div>
                   <input
                     type="range"
-                    min="800"
-                    max="2000"
-                    step="50"
+                    min="400"
+                    max="2500"
+                    step="25"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(parseInt(e.target.value))}
                     className="w-full accent-brand-primary"
                   />
+                  <div className="flex justify-between text-[10px] font-mono text-brand-muted mt-1">
+                    <span>₹400</span>
+                    <span>₹2500</span>
+                  </div>
                 </div>
               </div>
 

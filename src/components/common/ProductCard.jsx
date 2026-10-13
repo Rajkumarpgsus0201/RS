@@ -51,35 +51,53 @@ export default function ProductCard({ product, onNavigateProduct }) {
       {/* Top Image Container */}
       <div 
         onClick={() => onNavigateProduct(product.id)}
-        className="relative aspect-[4/5] w-full overflow-hidden bg-brand-dark cursor-pointer"
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+        data-protected-image="true"
+        className="relative aspect-[4/5] w-full overflow-hidden bg-brand-dark cursor-pointer protected-container select-none"
       >
         {/* Primary Image */}
         <img
           src={product.images.primary}
           alt={product.name}
-          className={`h-full w-full object-cover object-center transition-all duration-700 ease-out ${
-            isHovered && product.images.secondary ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+          draggable="false"
+          className={`h-full w-full object-cover object-center transition-all duration-700 ease-out select-none pointer-events-none ${
+            isHovered && product.images.secondary && product.images.secondary !== product.images.primary
+              ? 'opacity-0 scale-105'
+              : isHovered
+              ? 'scale-105 opacity-100'
+              : 'opacity-100 scale-100'
           }`}
           loading="lazy"
         />
 
-        {/* Secondary Image on Hover */}
-        {product.images.secondary && (
+        {/* Secondary Image on Hover (only if distinct from primary) */}
+        {product.images.secondary && product.images.secondary !== product.images.primary && (
           <img
             src={product.images.secondary}
             alt={`${product.name} alternate view`}
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-700 ease-out ${
+            draggable="false"
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-all duration-700 ease-out select-none pointer-events-none ${
               isHovered ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
             }`}
             loading="lazy"
           />
         )}
 
+        {/* Front & Back All-in-one Indicator for single image designs */}
+        {(!product.images.secondary || product.images.secondary === product.images.primary) && (
+          <div className="absolute bottom-3 left-3 pointer-events-none z-20">
+            <span className="px-2 py-0.5 text-[9px] font-heading font-bold uppercase tracking-wider rounded bg-brand-dark/90 text-brand-secondary border border-brand-primary/40 backdrop-blur-md">
+              FRONT & BACK VIEW
+            </span>
+          </div>
+        )}
+
         {/* Subtle Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity pointer-events-none" />
 
         {/* Top Badges */}
-        <div className="absolute top-3 left-3 right-3 flex items-start justify-between pointer-events-none">
+        <div className="absolute top-3 left-3 right-3 flex items-start justify-between pointer-events-none z-20">
           {product.badge && (
             <span className={`px-3 py-1 text-[10px] font-heading font-bold tracking-wider uppercase rounded-md shadow-md backdrop-blur-md ${
               product.isUpcoming 
