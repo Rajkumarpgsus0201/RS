@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, ShoppingBag, MessageSquare, Truck, ShieldCheck, RefreshCw, HelpCircle, ChevronDown, Star, Sparkles, Check, ArrowRight, Clock, Flame, CheckCircle2 } from 'lucide-react';
-import { PRODUCTS, BRAND_CONFIG } from '../data/products';
+import { Heart, ShoppingBag, Share2, Copy, MessageSquare, Truck, ShieldCheck, RefreshCw, HelpCircle, ChevronDown, Star, Sparkles, Check, ArrowRight, Clock, Flame, CheckCircle2 } from 'lucide-react';
+import { PRODUCTS, BRAND_CONFIG, getProductShareUrl } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import SizeGuideModal from '../components/common/SizeGuideModal';
@@ -17,6 +17,32 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
   const [selectedSize, setSelectedSize] = useState('L');
   const [quantity, setQuantity] = useState(1);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleShareProduct = async (e) => {
+    e?.stopPropagation?.();
+    const url = getProductShareUrl(product);
+    if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent || '')) {
+      try {
+        await navigator.share({
+          title: `${product.name} | RADNUZ STUDIO`,
+          text: `Check out ${product.name} on RADNUZ STUDIO!`,
+          url
+        });
+        return;
+      } catch (err) {
+        // Fallback to clipboard
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2500);
+    } catch (err) {
+      window.prompt('Copy product link:', url);
+    }
+  };
   const [activeAccordion, setActiveAccordion] = useState('fabric'); // 'fabric' | 'care' | 'shipping'
 
   // Update selectedImage and color when productId changes
@@ -165,6 +191,16 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
               aria-label="Toggle Wishlist"
             >
               <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+            </button>
+
+            {/* Direct Share Button */}
+            <button
+              onClick={handleShareProduct}
+              className="absolute top-16 right-4 z-20 p-3 rounded-full transition-all backdrop-blur-md bg-brand-dark/70 text-brand-muted hover:text-white hover:bg-brand-dark border border-white/10"
+              aria-label="Share direct product link"
+              title={`Share / Copy Link (radunz.shop/${product.slug})`}
+            >
+              <Share2 className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -389,6 +425,34 @@ export default function ProductDetailPage({ productId, onNavigateProduct, setAct
                 </button>
               </div>
             )}
+
+            {/* Direct Share Link Bar */}
+            <div className="p-3.5 rounded-xl bg-brand-elevated border border-brand-border flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-[11px] font-mono text-brand-muted uppercase tracking-wider shrink-0">Direct Link:</span>
+                <span className="text-xs font-mono font-bold text-brand-secondary truncate">
+                  radunz.shop/{product.slug}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleShareProduct}
+                className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-surface hover:bg-brand-primary/20 text-brand-light hover:text-white border border-brand-border text-xs font-heading font-bold uppercase tracking-wider transition-all"
+                title="Copy direct share link"
+              >
+                {isCopied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5 text-brand-secondary" />
+                    <span>Copy Link</span>
+                  </>
+                )}
+              </button>
+            </div>
 
             {/* Feature Highlights */}
             <div className="grid grid-cols-2 gap-3 pt-2 text-[11px] font-heading font-semibold text-brand-muted">

@@ -12,7 +12,10 @@ import Toast from './components/common/Toast';
 import SearchModal from './components/common/SearchModal';
 import CartDrawer from './components/cart/CartDrawer';
 import PolicyModal from './components/common/PolicyModal';
-import CommunityPopup from './components/common/CommunityPopup';
+import DiwaliOfferPopup from './components/common/DiwaliOfferPopup';
+
+// Data
+import { PRODUCTS, findProductBySlugOrId } from './data/products';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -33,16 +36,60 @@ export default function App() {
   // Policy Modal state
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState(false);
   const [policyModalTab, setPolicyModalTab] = useState('whatsapp');
-  const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false);
+
+  // Diwali Offer Popup state
+  const [isDiwaliOfferOpen, setIsDiwaliOfferOpen] = useState(false);
 
   const handleOpenPolicy = (tab = 'whatsapp') => {
     setPolicyModalTab(tab);
     setIsPolicyModalOpen(true);
   };
 
-  // Show the community invite when a visitor enters the site.
+  // 1. URL Routing Support: Separate direct links like radunz.shop/thala-tshirt
   useEffect(() => {
-    setIsCommunityPopupOpen(true);
+    const handleUrlRoute = () => {
+      const rawPath = window.location.pathname.replace(/^\/+|\/+$/g, '');
+      const searchParams = new URLSearchParams(window.location.search);
+      const productQuery = searchParams.get('product') || searchParams.get('p');
+
+      const target = productQuery || rawPath;
+
+      if (target) {
+        // Standard pages
+        const validPages = ['shop', 'about', 'customize', 'checkout', 'wishlist'];
+        if (validPages.includes(target.toLowerCase())) {
+          setActivePage(target.toLowerCase());
+          return;
+        }
+
+        // Product matching by slug, id, or alias (e.g. thala-tshirt, thalapathy-tshirt)
+        const matchedProduct = findProductBySlugOrId(target);
+        if (matchedProduct) {
+          setSelectedProductId(matchedProduct.id);
+          setActivePage('product');
+          return;
+        }
+      }
+
+      // Default root
+      if (!rawPath) {
+        setActivePage('home');
+      }
+    };
+
+    handleUrlRoute();
+
+    // Listen for browser Back/Forward navigation
+    window.addEventListener('popstate', handleUrlRoute);
+    return () => window.removeEventListener('popstate', handleUrlRoute);
+  }, []);
+
+  // 2. Show Diwali Offer Popup when visitor enters
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsDiwaliOfferOpen(true);
+    }, 600);
+    return () => clearTimeout(timer);
   }, []);
 
   // Keyboard shortcut: Cmd+K or Ctrl+K to open search
@@ -95,14 +142,30 @@ export default function App() {
     };
   }, []);
 
-  const navigateToProduct = (productId) => {
+  const navigateToProduct = (productId, replace = false) => {
+    const prod = PRODUCTS.find(p => p.id === productId);
     setSelectedProductId(productId);
     setActivePage('product');
+
+    // Update browser URL to individual product link (e.g. /thala-tshirt)
+    const slug = prod ? (prod.slug || prod.id) : productId;
+    const url = `/${slug}`;
+    if (window.location.pathname !== url) {
+      if (replace) {
+        window.history.replaceState({ page: 'product', productId }, '', url);
+      } else {
+        window.history.pushState({ page: 'product', productId }, '', url);
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePageChange = (page) => {
     setActivePage(page);
+    const url = page === 'home' ? '/' : `/${page}`;
+    if (window.location.pathname !== url) {
+      window.history.pushState({ page }, '', url);
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -125,6 +188,7 @@ export default function App() {
                 setActivePage={handlePageChange}
                 onNavigateProduct={navigateToProduct}
                 setSelectedCategory={setSelectedCategory}
+                onOpenDiwaliOffer={() => setIsDiwaliOfferOpen(true)}
               />
             )}
 
@@ -168,7 +232,6 @@ export default function App() {
                 setActivePage={handlePageChange}
               />
             )}
-
           </main>
 
           {/* 4. Global Streetwear Footer */}
@@ -180,8 +243,7 @@ export default function App() {
           {/* 5. Modals & Overlays */}
           <CartDrawer
             onProceedCheckout={() => {
-              setActivePage('checkout');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              handlePageChange('checkout');
             }}
           />
 
@@ -199,19 +261,32 @@ export default function App() {
             onOpenPolicyModal={handleOpenPolicy}
           />
 
-          {/* 6. Legal & WhatsApp Policies Modal */}
+          {/* 6. Legal Policies Modal */}
           <PolicyModal
             isOpen={isPolicyModalOpen}
             onClose={() => setIsPolicyModalOpen(false)}
             initialTab={policyModalTab}
           />
 
-          <CommunityPopup
-            isOpen={isCommunityPopupOpen}
-            onClose={() => setIsCommunityPopupOpen(false)}
+          {/* 7. Diwali Offer Popup (Buy Thala + Thalapathy, Get Thala-Thalapathy Free) */}
+          <DiwaliOfferPopup
+            isOpen={isDiwaliOfferOpen}
+            onClose={() => setIsDiwaliOfferOpen(false)}
+            onNavigateProduct={navigateToProduct}
           />
 
-          {/* 7. Notification Toasts */}
+          {/* Floating Diwali Offer Re-open Pill */}
+          <button
+            type="button"
+            onClick={() => setIsDiwaliOfferOpen(true)}
+            className="fixed bottom-6 left-6 z-40 hidden md:flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-red-600 to-amber-500 text-white font-heading font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:scale-105 transition-all border border-amber-300/40"
+            title="Open Diwali Special Combo Offer"
+          >
+            <span>🪔</span>
+            <span>DIWALI OFFER: BUY 2 GET 1 FREE</span>
+          </button>
+
+          {/* 8. Notification Toasts */}
           <Toast />
         </div>
       </WishlistProvider>

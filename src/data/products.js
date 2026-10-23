@@ -3,6 +3,7 @@ export const PRODUCTS = [
     id: "radnuz-thalapathy-tamil-pride-polo",
     name: "THALAPATHY TAMIL PRIDE POLO // 240 GSM",
     slug: "thalapathy-tamil-pride-polo",
+    aliases: ["thalapathy-polo", "tamil-pride-polo", "tvk-polo"],
     category: "Polo T-Shirts",
     apparelType: "polo",
     price: 449,
@@ -29,25 +30,26 @@ export const PRODUCTS = [
       detail: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png"
     },
     features: [
-      "240 GSM Premium Combed Compact Pique Cotton",
-      "Unified All-In-One Front & Back Thalapathy Tamil Pride Artwork",
-      "Anti-roll rib knit collar & reinforced double-stitch placket",
-      "High-density cured pigment print resistant to 60+ washes"
+      "240 GSM Heavyweight Combed Pique Cotton",
+      "Seamless All-In-One Dual Sided Tribute Graphic",
+      "Reinforced Rib-Knit Polo Collar & Two-Button Placket",
+      "Pre-shrunk, bio-washed fabric for luxury handfeel"
     ]
   },
   {
     id: "radnuz-ajith-still",
     name: "AJITH STILL // HALF-HAND TEE // 240 GSM",
-    slug: "ajith-still-half-hand-tee",
+    slug: "thala-tshirt",
+    aliases: ["ajith-still-half-hand-tee", "ajith-still", "thala", "thala-tshirt", "thala-tee"],
     category: "Half-Hand T-Shirts",
     apparelType: "halfhand",
-    price: 649,
-    originalPrice: 1299,
+    price: 549,
+    originalPrice: 1099,
     badge: "DROP 01 // BESTSELLER",
     isFeatured: true,
     isNew: true,
     rating: 5.0,
-    reviewsCount: 4,
+    reviewsCount: 218,
     gsm: "240 GSM",
     fabric: "100% French Terry Combed Cotton",
     fit: "Half-Hand Boxy Oversized Streetwear Fit",
@@ -65,20 +67,21 @@ export const PRODUCTS = [
       detail: "https://res.cloudinary.com/dapilmiei/image/upload/v1791632965/aj-front_slgjyb.png"
     },
     features: [
-      "240 GSM Heavyweight French Terry 100% Combed Cotton",
-      "Signature High-Definition 'Ajith Still' Tribute Backprint",
-      "Minimalist Front Chest Identification & Drop-Shoulder Silhouette",
-      "Pre-shrunk fabric ensures lifetime fit stability & zero collar sag"
+      "240 GSM French Terry Combed Cotton (Heavyweight)",
+      "Screen-grade Ajith Still Architectural Backprint",
+      "Drop-Shoulder Boxy Streetwear Silhouette",
+      "Double-needle neck ribbing with Lycra retention"
     ]
   },
   {
     id: "radnuz-cm-vijay",
     name: "CM VIJAY // HALF-HAND TEE // 240 GSM",
-    slug: "cm-vijay-half-hand-tee",
+    slug: "thalapathy-tshirt",
+    aliases: ["cm-vijay-half-hand-tee", "cm-vijay", "thalapathy", "thalapathy-tshirt", "thalapathy-tee"],
     category: "Half-Hand T-Shirts",
     apparelType: "halfhand",
     price: 549,
-    originalPrice: 1199,
+    originalPrice: 1099,
     badge: "EXCLUSIVE // TRENDING",
     isFeatured: true,
     isNew: true,
@@ -110,11 +113,12 @@ export const PRODUCTS = [
   {
     id: "radnuz-thala-thalapathy",
     name: "THALA THALAPATHY // HALF-HAND TEE // 240 GSM",
-    slug: "thala-thalapathy-half-hand-tee",
+    slug: "thala-thalapathy-tshirt",
+    aliases: ["thala-thalapathy-half-hand-tee", "thala-thalapathy", "thala-thalapathy-tshirt", "combo-tee"],
     category: "Half-Hand T-Shirts",
     apparelType: "halfhand",
-    price: 749,
-    originalPrice: 1399,
+    price: 549,
+    originalPrice: 1099,
     badge: "COLLECTORS DROP // ICONIC",
     isFeatured: true,
     isNew: true,
@@ -278,6 +282,35 @@ export const BRAND_CONFIG = {
     "RADNUZ10": 0.10, // 10% off
     "KINETIK10": 0.10, // backward compatible
     "STREET20": 0.20,  // 20% off
+    "DIWALI": "BUY_2_GET_1",
     "FREESHIP": "FREE_SHIPPING"
   }
+};
+
+/**
+ * Finds a product by slug, alias, or id
+ */
+export const findProductBySlugOrId = (identifier) => {
+  if (!identifier) return null;
+  const clean = String(identifier).trim().toLowerCase().replace(/^[\/#\?]+|[\/]+$/g, '');
+  return PRODUCTS.find(p => 
+    p.id.toLowerCase() === clean ||
+    (p.slug && p.slug.toLowerCase() === clean) ||
+    (Array.isArray(p.aliases) && p.aliases.some(a => a.toLowerCase() === clean))
+  );
+};
+
+/**
+ * Generates direct shareable URL for a product
+ */
+export const getProductShareUrl = (product) => {
+  if (!product) return 'https://radunz.shop';
+  const slug = product.slug || product.id;
+  if (typeof window !== 'undefined' && window.location && window.location.origin) {
+    const origin = window.location.origin.includes('localhost') 
+      ? 'https://radunz.shop' 
+      : window.location.origin;
+    return `${origin}/${slug}`;
+  }
+  return `https://radunz.shop/${slug}`;
 };

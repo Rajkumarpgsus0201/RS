@@ -1,23 +1,30 @@
 import React from 'react';
-import { Zap, ShieldCheck, Truck } from 'lucide-react';
+import { Sparkles, Truck, Flame } from 'lucide-react';
 
-export default function AnnouncementBar() {
+export default function AnnouncementBar({ onOpenDiwaliOffer }) {
   return (
-    <div className="w-full bg-brand-volt text-brand-black text-[11px] font-mono font-bold py-1.5 px-4 overflow-hidden border-b border-brand-border">
+    <div 
+      onClick={onOpenDiwaliOffer}
+      className="w-full bg-gradient-to-r from-amber-500 via-red-600 to-amber-500 text-white text-[11px] font-mono font-bold py-2 px-4 overflow-hidden border-b border-amber-400/30 cursor-pointer shadow-md select-none"
+    >
       <div className="flex items-center justify-between max-w-7xl mx-auto">
-        <div className="hidden md:flex items-center gap-2">
-          <Truck className="w-3.5 h-3.5" />
-          <span>FREE EXPRESS SHIPPING ON ORDERS OVER ₹1,499</span>
+        <div className="hidden md:flex items-center gap-2 text-amber-200">
+          <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '4s' }} />
+          <span>DIWALI FESTIVE DROP // LIMITED TIME</span>
         </div>
         
-        <div className="flex items-center justify-center w-full md:w-auto gap-3 text-center">
-          <span className="bg-brand-black text-brand-volt px-1.5 py-0.5 rounded text-[10px]">DROP 01 LIVE</span>
-          <span>USE CODE <span className="underline tracking-wider font-extrabold">RADNUZ10</span> FOR 10% OFF</span>
+        <div className="flex items-center justify-center w-full md:w-auto gap-2 text-center tracking-wide">
+          <span className="bg-black/50 text-amber-300 px-2 py-0.5 rounded text-[10px] font-heading font-black uppercase">
+            🪔 DIWALI COMBO
+          </span>
+          <span className="font-heading font-extrabold text-xs">
+            BUY THALA & THALAPATHY TEE → <span className="underline text-amber-200">GET THALA-THALAPATHY TEE FREE!</span>
+          </span>
         </div>
 
-        <div className="hidden lg:flex items-center gap-2">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>240 GSM HEAVYWEIGHT • 60+ WASH TESTED</span>
+        <div className="hidden lg:flex items-center gap-2 text-amber-200">
+          <Truck className="w-3.5 h-3.5" />
+          <span>FREE EXPRESS DELIVERY INCLUDED</span>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, ShoppingBag, Eye, Check, MessageSquare, Clock, Sparkles } from 'lucide-react';
+import { Heart, Plus, Share2, ShoppingBag, Eye, Check, MessageSquare, Clock, Sparkles } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
-import { BRAND_CONFIG } from '../../data/products';
+import { BRAND_CONFIG, getProductShareUrl } from '../../data/products';
 
 export default function ProductCard({ product, onNavigateProduct }) {
   const { addToCart } = useCart();
@@ -23,6 +23,25 @@ export default function ProductCard({ product, onNavigateProduct }) {
       quantity: 1
     });
     setShowQuickSize(false);
+  };
+
+  const handleShare = async (e) => {
+    e.stopPropagation();
+    const url = getProductShareUrl(product);
+    if (navigator.share && /mobile|android|iphone/i.test(navigator.userAgent || '')) {
+      try {
+        await navigator.share({
+          title: `${product.name} | RADNUZ STUDIO`,
+          url
+        });
+        return;
+      } catch (err) {}
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch (err) {
+      window.prompt('Copy product link:', url);
+    }
   };
 
   const handleReserveWhatsApp = (e) => {
@@ -108,7 +127,19 @@ export default function ProductCard({ product, onNavigateProduct }) {
             </span>
           )}
 
-          {/* Wishlist Button */}
+          {/* Share & Wishlist Action Cluster */}
+          <div className="flex items-center gap-1.5 pointer-events-auto">
+            <button
+              type="button"
+              onClick={handleShare}
+              className="p-2.5 rounded-full transition-all duration-200 backdrop-blur-md bg-brand-dark/70 text-brand-muted hover:text-white hover:bg-brand-dark"
+              aria-label="Share direct product link"
+              title={`Share link (radunz.shop/${product.slug})`}
+            >
+              <Share2 className="w-3.5 h-3.5" />
+            </button>
+            
+            {/* Wishlist Button */}
           <button
             type="button"
             onClick={(e) => {
@@ -124,6 +155,7 @@ export default function ProductCard({ product, onNavigateProduct }) {
           >
             <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
           </button>
+          </div>
         </div>
 
         {/* GSM & Fit Technical Tag */}
