@@ -146,6 +146,81 @@ export const PRODUCTS = [
       "Front Chest Identity & Boxy Streetwear Silhouette",
       "Pre-shrunk & silicone washed for all-day comfort"
     ]
+  },
+  {
+    id: "radnuz-mankatha-thala",
+    name: "MANKATHA THALA // HALF-HAND TEE // 240 GSM",
+    slug: "mankatha-thala",
+    aliases: ["mankatha-thala-half-hand-tee", "mankatha", "mankatha-thala", "mankatha-tshirt", "mankatha-tee", "ajith-mankatha", "vinayak-mahadev"],
+    category: "Half-Hand T-Shirts",
+    apparelType: "halfhand",
+    price: 549,
+    originalPrice: 1099,
+    badge: "🔥 BESTSELLER // NEW DROP",
+    isFeatured: true,
+    isNew: true,
+    rating: 5.0,
+    reviewsCount: 164,
+    gsm: "240 GSM",
+    fabric: "100% French Terry Combed Cotton",
+    fit: "Half-Hand Boxy Oversized Streetwear Fit",
+    description: "Iconic 'Mankatha Thala' tribute tee featuring the legendary Vinayak Mahadev 'Me after realising, she's not worth it' back graphic and golden chest emblem. Engineered on heavyweight 240 GSM luxury French Terry cotton with bio-wash softness and high-density screen print.",
+    colors: [
+      { name: "Crimson Red", hex: "#7E1416", class: "bg-[#7E1416]" },
+      { name: "Onyx Black", hex: "#141416", class: "bg-[#141416]" },
+      { name: "Vintage Chalk", hex: "#E8E8E4", class: "bg-[#E8E8E4]" },
+      { name: "Washed Charcoal", hex: "#2A2B30", class: "bg-[#2A2B30]" }
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    images: {
+      primary: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743947/radnuz-aj3_back_mjimxb.png",
+      secondary: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743912/radnuz-aj3_front_qtjo5p.png",
+      model: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743947/radnuz-aj3_back_mjimxb.png",
+      detail: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743912/radnuz-aj3_front_qtjo5p.png"
+    },
+    features: [
+      "240 GSM French Terry Combed Cotton (Heavyweight)",
+      "High-definition Mankatha Vinayak Mahadev Back Graphic",
+      "Minimal Golden Chest Emblem & Boxy Streetwear Cut",
+      "Double-needle neck ribbing with Lycra retention"
+    ]
+  },
+  {
+    id: "radnuz-ntk",
+    name: "NTK // HALF-HAND TEE // 240 GSM",
+    slug: "ntk",
+    aliases: ["ntk-half-hand-tee", "ntk", "ntk-tshirt", "ntk-tee", "naam-tamilar", "methagu", "methagu-tshirt", "seeman-tshirt", "prabhakaran-tshirt"],
+    category: "Half-Hand T-Shirts",
+    apparelType: "halfhand",
+    price: 549,
+    originalPrice: 1099,
+    badge: "🔥 TRENDING // TRIBUTE DROP",
+    isFeatured: true,
+    isNew: true,
+    rating: 5.0,
+    reviewsCount: 128,
+    gsm: "240 GSM",
+    fabric: "100% Combed French Terry Cotton",
+    fit: "Half-Hand Boxy Oversized Streetwear Fit",
+    description: "Tribute edition 'NTK' half-hand streetwear tee featuring the high-contrast 'மேதகு' (Methagu) Prabhakaran & Seeman statement graphic on the back with the iconic 'நாம் தமிழர்' tiger chest emblem on the front. Crafted from heavyweight 240 GSM luxury French Terry cotton with bio-wash handfeel.",
+    colors: [
+      { name: "Onyx Black", hex: "#141416", class: "bg-[#141416]" },
+      { name: "Vintage Chalk", hex: "#E8E8E4", class: "bg-[#E8E8E4]" },
+      { name: "Washed Charcoal", hex: "#2A2B30", class: "bg-[#2A2B30]" }
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    images: {
+      primary: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png",
+      secondary: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png",
+      model: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png",
+      detail: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png"
+    },
+    features: [
+      "240 GSM Premium French Terry Cotton construction",
+      "Dual Sided 'நாம் தமிழர்' Front & 'மேதகு' Back Graphic",
+      "Drop-Shoulder Relaxed Streetwear Silhouette",
+      "Double-needle stitched hems & silicone softened finish"
+    ]
   }
 ];
 
@@ -153,7 +228,7 @@ export const CATEGORIES = [
   {
     id: "all",
     name: "ALL ARCHIVE",
-    count: 4,
+    count: 6,
     description: "Current live drops and production pipeline.",
     image: "https://res.cloudinary.com/dapilmiei/image/upload/v1791902562/radnuz-tvk_pe150d.png"
   },
@@ -167,8 +242,8 @@ export const CATEGORIES = [
   {
     id: "half-hand",
     name: "HALF-HAND T-SHIRTS",
-    count: 3,
-    description: "240 GSM signature tees: Ajith Still, CM Vijay & Thala Thalapathy.",
+    count: 5,
+    description: "240 GSM signature tees: Ajith Still, CM Vijay, Thala Thalapathy, Mankatha Thala & NTK.",
     image: "https://res.cloudinary.com/dapilmiei/image/upload/v1791632970/aj-back_pblqgr.png"
   },
   {
@@ -219,6 +294,18 @@ export const PRESET_CUSTOM_GRAPHICS = [
     name: "Thala Thalapathy Dual",
     category: "Tribute",
     svgUrl: "https://res.cloudinary.com/dapilmiei/image/upload/v1791632970/TT-back_vsxvub.png"
+  },
+  {
+    id: "g-mankatha-thala",
+    name: "Mankatha Thala Graphic",
+    category: "Tribute",
+    svgUrl: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743947/radnuz-aj3_back_mjimxb.png"
+  },
+  {
+    id: "g-ntk-methagu",
+    name: "NTK Methagu Graphic",
+    category: "Tribute",
+    svgUrl: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png"
   }
 ];
 
@@ -266,6 +353,28 @@ export const LOOKBOOK_REVIEWS = [
     text: "Thalapathy Tamil Pride Polo is pure fire 🔥! Both front and back prints look super crisp, and at ₹449 the 240 GSM pique fabric feels unbelievably premium.",
     product: "THALAPATHY TAMIL PRIDE POLO // 240 GSM",
     sizeOrdered: "L (Streetwear Fit)"
+  },
+  {
+    id: 5,
+    author: "Dinesh K.",
+    location: "Salem, IN",
+    avatar: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743912/radnuz-aj3_front_qtjo5p.png",
+    fitImage: "https://res.cloudinary.com/dapilmiei/image/upload/v1792743947/radnuz-aj3_back_mjimxb.png",
+    rating: 5,
+    text: "Mankatha Thala tee is legendary! Vinayak Mahadev backprint is ultra clean with zero cracking. The crimson red blank has that exact heavyweight drop-shoulder boxy fit.",
+    product: "MANKATHA THALA // HALF-HAND TEE // 240 GSM",
+    sizeOrdered: "L (Boxy Fit)"
+  },
+  {
+    id: 6,
+    author: "Prabhu M.",
+    location: "Tirunelveli, IN",
+    avatar: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png",
+    fitImage: "https://res.cloudinary.com/dapilmiei/image/upload/v1792744263/radnuz-ntk_gomw0h.png",
+    rating: 5,
+    text: "The NTK Methagu graphic print quality blew me away. 240 GSM French Terry cotton feels super heavy and durable. Truly worth every rupee!",
+    product: "NTK // HALF-HAND TEE // 240 GSM",
+    sizeOrdered: "XL (Oversized Fit)"
   }
 ];
 
