@@ -18,6 +18,7 @@ export default function Navbar({ activePage, setActivePage, onOpenSearch, onOpen
   }, []);
 
   const navLinks = [
+    { name: 'Showroom', page: 'showroom', badge: '3D RACK' },
     { name: 'Shop All', page: 'shop', badge: null },
     { name: 'Custom Studio', page: 'customize', badge: '1-OF-1' },
     { name: 'Featured Drops', page: 'home', section: 'featured' },

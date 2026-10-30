@@ -79,6 +79,17 @@ export default function MobileMenu({ isOpen, onClose, setActivePage, activePage 
               </button>
 
               <button
+                onClick={() => navigateTo('showroom')}
+                className="w-full flex items-center justify-between py-3.5 px-3 text-left font-display font-bold text-xl text-emerald-400 hover:text-emerald-300 border-b border-brand-border/40"
+              >
+                <div className="flex items-center gap-2">
+                  <span>VIRTUAL SHOWROOM</span>
+                  <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-md font-extrabold">3D RACK</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-emerald-400" />
+              </button>
+
+              <button
                 onClick={() => navigateTo('shop')}
                 className="w-full flex items-center justify-between py-3.5 px-3 text-left font-display font-bold text-xl text-brand-light hover:text-brand-secondary border-b border-brand-border/40"
               >

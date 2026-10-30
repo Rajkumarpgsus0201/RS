@@ -12,7 +12,6 @@ import Toast from './components/common/Toast';
 import SearchModal from './components/common/SearchModal';
 import CartDrawer from './components/cart/CartDrawer';
 import PolicyModal from './components/common/PolicyModal';
-import DiwaliOfferPopup from './components/common/DiwaliOfferPopup';
 
 // Data
 import { PRODUCTS, findProductBySlugOrId } from './data/products';
@@ -25,9 +24,10 @@ import CustomizerPage from './pages/CustomizerPage';
 import CheckoutPage from './pages/CheckoutPage';
 import AboutPage from './pages/AboutPage';
 import WishlistPage from './pages/WishlistPage';
+import ShowroomPage from './pages/ShowroomPage';
 
 export default function App() {
-  const [activePage, setActivePage] = useState('home'); // 'home' | 'shop' | 'product' | 'customize' | 'checkout' | 'about' | 'wishlist'
+  const [activePage, setActivePage] = useState('home'); // 'home' | 'showroom' | 'shop' | 'product' | 'customize' | 'checkout' | 'about' | 'wishlist'
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -36,9 +36,6 @@ export default function App() {
   // Policy Modal state
   const [isPolicyModalOpen, setIsPolicyModalOpen] = useState(false);
   const [policyModalTab, setPolicyModalTab] = useState('whatsapp');
-
-  // Diwali Offer Popup state
-  const [isDiwaliOfferOpen, setIsDiwaliOfferOpen] = useState(false);
 
   const handleOpenPolicy = (tab = 'whatsapp') => {
     setPolicyModalTab(tab);
@@ -56,7 +53,7 @@ export default function App() {
 
       if (target) {
         // Standard pages
-        const validPages = ['shop', 'about', 'customize', 'checkout', 'wishlist'];
+        const validPages = ['shop', 'showroom', 'about', 'customize', 'checkout', 'wishlist'];
         if (validPages.includes(target.toLowerCase())) {
           setActivePage(target.toLowerCase());
           return;
@@ -84,13 +81,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', handleUrlRoute);
   }, []);
 
-  // 2. Show Diwali Offer Popup when visitor enters
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsDiwaliOfferOpen(true);
-    }, 600);
-    return () => clearTimeout(timer);
-  }, []);
+
 
   // Keyboard shortcut: Cmd+K or Ctrl+K to open search
   useEffect(() => {
@@ -188,7 +179,13 @@ export default function App() {
                 setActivePage={handlePageChange}
                 onNavigateProduct={navigateToProduct}
                 setSelectedCategory={setSelectedCategory}
-                onOpenDiwaliOffer={() => setIsDiwaliOfferOpen(true)}
+              />
+            )}
+
+            {activePage === 'showroom' && (
+              <ShowroomPage
+                onNavigateProduct={navigateToProduct}
+                setActivePage={handlePageChange}
               />
             )}
 
@@ -267,24 +264,6 @@ export default function App() {
             onClose={() => setIsPolicyModalOpen(false)}
             initialTab={policyModalTab}
           />
-
-          {/* 7. Diwali Offer Popup (Buy Thala + Thalapathy, Get Thala-Thalapathy Free) */}
-          <DiwaliOfferPopup
-            isOpen={isDiwaliOfferOpen}
-            onClose={() => setIsDiwaliOfferOpen(false)}
-            onNavigateProduct={navigateToProduct}
-          />
-
-          {/* Floating Diwali Offer Re-open Pill */}
-          <button
-            type="button"
-            onClick={() => setIsDiwaliOfferOpen(true)}
-            className="fixed bottom-6 left-6 z-40 hidden md:flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-red-600 to-amber-500 text-white font-heading font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:scale-105 transition-all border border-amber-300/40"
-            title="Open Diwali Special Combo Offer"
-          >
-            <span>🪔</span>
-            <span>DIWALI OFFER: BUY 2 GET 1 FREE</span>
-          </button>
 
           {/* 8. Notification Toasts */}
           <Toast />
